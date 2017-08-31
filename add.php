@@ -21,22 +21,34 @@ require_once 'utazas_listazas.php';
 <?php
 if (isset($_POST['submit'])) {
 
-    $sql = "insert into `utazas` (`datum`) values (:datum);";
-            "insert into `sofor` (`nev`) values (:sofor);";
-            "insert into `utazas` (`celallomas`) values (:celallomas);";
-            "insert into `busz` (`rendszam`) values (:rendszam);";
+   $stm = $db->prepare("insert into sofor(nev) values(:sofor)");
+    $stm->execute(["sofor" => $_POST["sofor"]]);
+    $sofor_id = $db->lastInsertId();
+    
+    
+    $stm = $db->prepare("insert into busz(rendszam) values(:rendszam)");
+    $stm->execute(["rendszam" => $_POST["rendszam"]]);
+    $busz_id = $db->lastInsertId();
+
+    
+    $stm = $db->prepare("insert into utazas(celallomas, datum, sofor_id, busz_id) values(:celallomas, :datum, :sofor, :busz)");
+    $stm->execute([
+        
+        
+        "celallomas" => $_POST["celallomas"],
+        "datum" => $_POST["datum"],
+        "sofor" => $sofor_id,
+        "busz" => $busz_id
             
-            print $sql;
-
-    $stmt = $db->prepare($sql);
-
-    $stmt->bindParam(':datum', $_POST['datum'], PDO::PARAM_STR);
-    $stmt->bindParam(':sofor', $_POST['sofor'], PDO::PARAM_STR);
-    $stmt->bindParam(':celallomas', $_POST['celallomas'], PDO::PARAM_STR);
-    $stmt->bindParam(':rendszam', $_POST['rendszam'], PDO::PARAM_STR);
-
-
-    $stmt->execute();
+           /* de egyébként ha megnyitod az utazas táblát szerkesztés nézetben, láthatod hogy az össze cella not nullable, tehát nem csinálhatod azt hogy beszursz egy sor úgy hogy csak egy cella adata van megadva insertnél
+egyébként meg nem konkatenáltad az insert stringet, gondolom azt szeretted volna...
+az utazas táblába ugy tudsz beszúrni hogy megadod az insert stringben az összes not nullable cella értékét ahogy a példában csinálom
+a sofor meg a busz cella az meg nem string ugye hanem id, amit a busz és sofor táblából kell kinyerni
+ahhoz meg először természetesen oda be kell szurni ezt a két értéket...
+nézd át azt ha gondolod beszélhetünk még róla skype-on vagy ha hazajössz.*/
+            
+            
+    ]);
 
 
 
