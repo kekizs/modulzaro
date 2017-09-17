@@ -1,6 +1,6 @@
 <?php
 
-require_once 'utazass.php';
+require_once 'config.php';
 require_once 'utazas_listazas.php';
 
 $result = [];
@@ -13,10 +13,7 @@ foreach ($db->query($sql) as $row) {
 }
     $utazas->id=$eid;
     foreach ($result as $utazas)
-
-
 ?>
-
 
 
 <form action="" method="post">
@@ -30,39 +27,54 @@ foreach ($db->query($sql) as $row) {
         </tr>
     </table>     
 
-    <input type="submit" name="submit" value="Modosit">
+    <input type="submit" name="edit" value="Modosit">
+        <input type="submit" name="delete" value="Töröl">
+
 </form>    
 <?php
 
 
 
-if (isset($_POST['submit'])) {
+if (isset($_POST['edit'])) {
 
     $utazas_id= $utazas->id;
     
-    $stm = $db->prepare("update sofor set nev = :sofor ");
+    $stm = $db->prepare("update utazas set celallomas = :celallomas  where id=$utazas_id");
+    $stm->execute(["celallomas" => $_POST["celallomas"]]);
+   
+    
+     $stm = $db->prepare("update utazas set datum = :datum  where id=$utazas_id");
+    $stm->execute(["datum" => $_POST["datum"]]);
+   
+    $stm = $db->prepare("update sofor set nev = :sofor  where id=$utazas_id");
     $stm->execute(["sofor" => $_POST["sofor"]]);
-    $sofor_id = $utazas->sofor_id;
     
+    print "update sofor set nev = :sofor  where id=$utazas_id";
     
-    $stm = $db->prepare("update busz set rendszam= :rendszam");
+    $stm = $db->prepare("update busz set rendszam= :rendszam where id=$utazas_id");
     $stm->execute(["rendszam" => $_POST["rendszam"]]);
-    $busz_id = $utazas->busz_id;
+  
+   
 
+    //header("Location: utazas_listazas.php");
+}
+
+if (isset($_POST['delete'])) {
     
-    $stm = $db->prepare("update utazas set (celallomas =:celallomas, datum =:datum, sofor_id =:sofor, busz_id =:busz) where utazas_id =:utazas_id;");
-    $stm->execute([
-        
-        
-        "celallomas" => $_POST["celallomas"],
-        "datum" => $_POST["datum"],
-        "sofor" => $sofor_id,
-        "busz" => $busz_id,
-        "id" => $utazas_id    
-            
-    ]);
-
-
-
+       $utazas_id= $utazas->id;
+    
+$stmt = $db->prepare("delete from utazas where id=$utazas_id"); 
+$stmt->execute();
+    
+    
     header("Location: utazas_listazas.php");
 }
+?>
+
+   </div>
+        <div id="footer">
+
+        </div>
+    </div>
+</body>
+</html>

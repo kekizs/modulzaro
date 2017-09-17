@@ -1,17 +1,4 @@
-<?php
-require_once 'config.php';
 
-$db = new PDO("mysql:host=localhost;dbname=modulzaro;charset=utf8", 'root', '');
-$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-$result = [];
-
-$sql = " SELECT utazas.id,utazas.datum, sofor.nev as sofor, utazas.celallomas,busz.rendszam FROM `utazas`,`busz`,`sofor` where busz.id=utazas.busz_id and sofor.id=utazas.sofor_id order by utazas.id;";
-
-foreach ($db->query($sql) as $row) {
-    $result[] = new utazass($row);
-}
-?>
 <!doctype html>
 <html lang="hu">
 	<head>
@@ -37,7 +24,7 @@ foreach ($db->query($sql) as $row) {
 <?php foreach ($result as $utazas) : ?>
         <tr>
 
-            <td><a href="/modify.php?id=<?= $utazas->id ?>"><?= $utazas->id ?></a></td>
+            <td><a href="./app/view/modify.php?id=<?= $utazas->id ?>"><?= $utazas->id ?></a></td>
             <td><?= $utazas->datum ?></td>
             <td><?= $utazas->sofor ?></td>
             <td><?= $utazas->celallomas ?></td>
@@ -45,5 +32,5 @@ foreach ($db->query($sql) as $row) {
         </tr>
 <?php endforeach; ?>
 </table>
-<a href="/add.php">hozzaadas</a>
+            <a href="./app/view/add.php">hozzáadas</a>
 

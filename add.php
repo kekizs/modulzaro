@@ -1,5 +1,5 @@
 <?php
-require_once 'utazass.php';
+require_once 'config.php';
 require_once 'utazas_listazas.php';
 ?>
 <form action="" method="post">
@@ -39,20 +39,17 @@ if (isset($_POST['submit'])) {
         "datum" => $_POST["datum"],
         "sofor" => $sofor_id,
         "busz" => $busz_id
-            
-           /* de egyébként ha megnyitod az utazas táblát szerkesztés nézetben, láthatod hogy az össze cella not nullable, tehát nem csinálhatod azt hogy beszursz egy sor úgy hogy csak egy cella adata van megadva insertnél
-egyébként meg nem konkatenáltad az insert stringet, gondolom azt szeretted volna...
-az utazas táblába ugy tudsz beszúrni hogy megadod az insert stringben az összes not nullable cella értékét ahogy a példában csinálom
-a sofor meg a busz cella az meg nem string ugye hanem id, amit a busz és sofor táblából kell kinyerni
-ahhoz meg először természetesen oda be kell szurni ezt a két értéket...
-nézd át azt ha gondolod beszélhetünk még róla skype-on vagy ha hazajössz.*/
-            
-            
+                 
     ]);
-
-
 
     header("Location: utazas_listazas.php");
 }
 
+?>
+   </div>
+        <div id="footer">
 
+        </div>
+    </div>
+</body>
+</html>
